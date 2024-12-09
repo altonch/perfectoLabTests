@@ -12,4 +12,4 @@ These tests are provided As-Is with no warranty or support from the Perfecto tea
 
 A user can work with these tests to check their connectivity to the Perfecto cloud lab.
 
-While I do not foree any risks these tests may cause, use these tests at your own volition.
+While I do not foree any risks with these tests, use these tests at your own volition.
