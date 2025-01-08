@@ -1,6 +1,6 @@
 // Created by Christopher Alton
-// Version 4.0
-// Updated 07-11-2024
+// Version 5.0
+// Updated 01-06-2025
 package windowsWebTests;
 
 import java.io.*;
@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -31,9 +32,9 @@ public class windowsWebTest {
 	private static RemoteWebDriver driver;
 	private static String windowsVersion = "11";
 	private static String browserType = "chrome";
-	private static String browserVersion = "130";
+	private static String browserVersion = "131";
 	private static String location = "boston";
-	private static String harCapture = "true";
+	private static String harCapture = "false";
 
 	public static void main(String[] args) throws MalformedURLException, IOException {
 		System.out.println("Run started");
@@ -43,7 +44,7 @@ public class windowsWebTest {
 		String host = login.trial;
 		String myToken = login.trialst;
 			
-			String myWUT = "https://www.time.is";
+			String myWUT = "https://the-internet.herokuapp.com/login";
 			String projectName = "support-windows-webTest";
 			String projectVersion = "1";
 			String scriptname = null;
@@ -102,17 +103,17 @@ public class windowsWebTest {
 				capabilities.setCapability("browserVersion", "latest-1");
 				System.out.println("If browser version latest-1 does not work - Try Version 111 or earlier");
 				break;
-			case "126":
-				capabilities.setCapability("browserVersion", "126");
+			case "131":
+				capabilities.setCapability("browserVersion", "131");
 				break;
-			case "125":
-				capabilities.setCapability("browserVersion", "125");
+			case "130":
+				capabilities.setCapability("browserVersion", "130");
 				break;
-			case "124":
-				capabilities.setCapability("browserVersion", "124");
+			case "129":
+				capabilities.setCapability("browserVersion", "129");
 				break;
-			case "123":
-				capabilities.setCapability("browserVersion", "123");
+			case "128":
+				capabilities.setCapability("browserVersion", "128");
 				break;
 			}
 			
@@ -165,85 +166,91 @@ public class windowsWebTest {
 		try {			
 			
 			System.out.println("**************** TEST STARTED ****************");
-			
+
 			Map<String, Object> params = new HashMap<>();
 
-			reportiumClient.testStart(scriptname, new TestContext("webTest", "supportTest"));
-			
-				reportiumClient.stepStart("Navigate to the Website");
-				System.out.println("Navigate to the Website");
-				driver.get(myWUT);
+			reportiumClient.testStart(scriptname, new TestContext("desktopWeb", "support", "chrome"));
 
-				reportiumClient.stepStart("Clear Disclaimer - If needed");
-				System.out.println("Clear Disclaimer - If needed");
-	            params.clear();
-	            params.put("content", "value your privacy");
-	            params.put("threshold", "80");
-	            params.put("timeout", "15");
-	            String disclaimer1 = (String)driver.executeScript("mobile:text:find", params);
-	            
-	            if (disclaimer1.equalsIgnoreCase("true")) {
-	                //successful checkpoint code
-	            	try {
-	            	reportiumClient.reportiumAssert("Text Found", true);
-					System.out.println("Text Found");
-	            	params.clear();
-	            	params.put("label", "agree");
-	            	params.put("timeout", "15");
-	            	params.put("threshold", "80");
-	            	driver.executeScript("mobile:button-text:click", params);
-	            	} catch (Exception e) {}          	
-	            	
-	            } else {
-	                // failed checkpoint code
-	            	reportiumClient.reportiumAssert("Text Not Found - No Issue", false);
-					System.out.println("Text Not Found - No Issue");
-	            }
-				
-				reportiumClient.stepStart("Verify The Time");
-				System.out.println("Verify The Time");
-				params.clear();
-				params.put("content", "Your Time is");
-				params.put("timeout", "30");
-				String res1 = (String)driver.executeScript("mobile:text:find", params);
+			reportiumClient.stepStart("Navigate to the Website");
+			System.out.println("Navigate to the Website");
+			driver.get(myWUT);
 
-				if (res1.equalsIgnoreCase("true")) {
-					//successful checkpoint code
-					reportiumClient.reportiumAssert("Text Found", true);
+			String userPath = "//*[@id=\"username\"]";
+			String passPath = "//*[@id=\"password\"]";
+			String loginButton = "//*[@class=\"radius\"]";
+			String logoutButton = "//*[@class=\"button secondary radius\"]";
+
+			String userName = "tomsmith";
+			String passWord = "SuperSecretPassword!";
+
+			String secureArea = "//*[text()=\" Secure Area\"]";
+
+			String google = "https://www.google.com";
+
+// ****** This is the code block for Logging Into the Website under test ******
+// ****** We will action findElement commands to send text (sendKeys) and ******
+// ****** to action click commands on the page under test ******
+
+			reportiumClient.stepStart("Type in userName");
+			System.out.println("Type in userName");
+			driver.findElement(By.xpath(userPath)).sendKeys(userName);
+
+			reportiumClient.stepStart("Type in passWord");
+			System.out.println("Type in passWord");
+			driver.findElement(By.xpath(passPath)).sendKeys(passWord);
+
+			reportiumClient.stepStart("Click Login Button");
+			System.out.println("Click Login Button");
+			driver.findElement(By.xpath(loginButton)).click();
+
+// ****** This is a code block for a Validation Scenario ******
+// ****** We will action a findElement command to verify ******
+// ****** if the selected element (secureArea) is visible ****** 	
+
+			try {
+				reportiumClient.stepStart("Verify Login Page");
+				System.out.println("Verify Login Page");
+				WebElement element = driver.findElement(By.xpath(secureArea));
+				if (element.isDisplayed()) {
+					reportiumClient.reportiumAssert("Login Page is Visible", true);
+					System.out.println("Login Page is Visible");
 				} else {
-					// failed checkpoint code
-					reportiumClient.reportiumAssert("Text Not Found - Alternate Search", false);
-
-					reportiumClient.stepStart("Alternate Verify");
-					params.clear();
-					params.put("content",  "Your clock is");
-					params.put("timeout", "30");
-					String res2 = (String)driver.executeScript("mobile:text:find", params);
-					if (res2.equalsIgnoreCase("true")) {
-						//successful checkpoint code
-						reportiumClient.reportiumAssert("Text Found", true);
-					} else {
-						// failed checkpoint code
-						reportiumClient.reportiumAssert("Text Not Found", false);
-					}  
+					reportiumClient.reportiumAssert("Login Page is Not Visible", false);
+					System.out.println("Login Page is Not Visible");
 				}
+			} catch (Exception e) {
+				System.out.println("Check to see why the element was not found");
+			}
 
-				reportiumClient.reportiumAssert("Successful Test Run", true);
-				System.out.println("Successful Test Run");
-				reportiumClient.testStop(TestResultFactory.createSuccess());
+// ****** This is a code block for an End Scenario ******
+// ****** We are done with the test. We will now log out of the test page ******
+// ****** and go to a neutral website before we close and release the device ******			
 
-				System.out.println("**************** TEST ENDED ****************");
- 
-			
+			reportiumClient.stepStart("Log Out of Test Page");
+			System.out.println("Log Out of TestPage");
+			driver.findElement(By.xpath(logoutButton)).click();
+
+			reportiumClient.stepStart("Move Browser to a Clean Page");
+			System.out.println("Move Browser to a Clean Page");
+			driver.get(google);
+
+			Thread.sleep(2000);
+
+// ****** This is the code block for the Tear Down Scenario ******				
+
+			reportiumClient.reportiumAssert("Successful Test Run", true);
+			System.out.println("Successful Test Run");
+			reportiumClient.testStop(TestResultFactory.createSuccess());
+
+			System.out.println("**************** TEST ENDED ****************");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
-			  
-			reportiumClient.reportiumAssert("Test Did Not Pass", false);
-			
-			reportiumClient.testStop(TestResultFactory.createFailure(e.getMessage(), e));
 
-			
+			reportiumClient.reportiumAssert("Test Did Not Pass", false);
+
+			reportiumClient.testStop(TestResultFactory.createFailure(e.getMessage(), e));
 		} finally {
 			try {
 				driver.close();
@@ -253,20 +260,14 @@ public class windowsWebTest {
 			}
 
 			driver.quit();
-			
+
 			System.out.println("Completed My Desktop Windows Web VM Test");
-			
+
 			String reportUrl = reportiumClient.getReportUrl();
 			System.out.println(reportUrl);
 		}
 
 		System.out.println("Report Link Above");
-		}
 
-	@SuppressWarnings("deprecation")
-	private static void getSource(RemoteWebDriver driver) throws IOException {
-		String source = driver.getPageSource();
-		System.out.println(source);
-		FileUtils.write(new File("C:\\Users\\christophera\\Desktop\\source.xml"), source); 
 	}
 }
