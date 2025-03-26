@@ -1,5 +1,5 @@
 # perfectoLabTests
-These are Known-Good tests I used for the Perfecto Lab.
+These are Known-Good tests I use for the Perfecto Lab.
 
 These tests are provided as-is. These are not an official offering from Perfecto or Perforce.
 
