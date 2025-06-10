@@ -243,6 +243,18 @@ private static AndroidDriver driver;
 			String myContext = (String) driver.getContext();
 			System.out.println(myContext);
 
+// ****** This is a code block to Check Accessibility ******
+// ****** This is an offering of the cloud. We test this function ******
+// ****** to ensure it is working as expected. ******
+// ****** The Accessibility Report will be available as ******
+// ****** a downloadable report from the finished execution report ******
+						
+			reportiumClient.stepStart("Verify Accessibility");
+			System.out.println("Verify Accessibility");
+			params.clear();
+			params.put("tag", "loginPage");
+			driver.executeScript("mobile:checkAccessibility:audit", params); 
+			
 // ****** These are the variables used for the following activities:  ******
 // ****** Variables for xPath locators ******
 // ****** Variables for the username and password data
