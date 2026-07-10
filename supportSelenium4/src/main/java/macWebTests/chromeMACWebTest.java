@@ -53,8 +53,8 @@ public class chromeMACWebTest {
 //****** Valid Locations: (NA-US-BOS), (EU Frankfurt),  (AP Sydney) ******
 //****** These are North America, Germany and Australia respectively ******
 
-	private static String platformVersion = "macOS Monterey";
-	private static String browserVersion = "130";
+	private static String platformVersion = "macOS Tahoe";
+	private static String browserVersion = "150";
 	private static String browserLocation = "NA-US-BOS";
 
 	public static RemoteWebDriver driver;
@@ -63,8 +63,8 @@ public class chromeMACWebTest {
 
 		logins login = new logins();
 
-		String host = login.trial;
-		String myToken = login.trialst;
+		String host = "myCloudShortName.perfectomobile.com";
+		String myToken = "Token_Goes_Here";
 
 		String myWUT = "https://the-internet.herokuapp.com/login";
 		String projectName = "support-MAC-webTest";
